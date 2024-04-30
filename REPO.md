@@ -16,7 +16,7 @@ A pre-commit git hook was created that confirms any commit made to the repositor
 Fuzz methods were created to test the Average, Median, reportProp, and reportDensity methods in report.py and the reportProportion in frequency.py. The main focus was to test and catch invalid inputs into these methods.
 
 # 4c
-Lots of files from 
+Lots of files from the MLForensics folder had indention errors, so we put all of our forensics into the methods of the main.py file. 
 
 # 4d
 Implemented continuous integration with codacy at codacy-analysis.yaml. The first couple of times it ran, it took a bit longer than we expected it to, but after a couple more tries, we were able to see that it ran successfully.
