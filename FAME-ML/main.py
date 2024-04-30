@@ -12,15 +12,19 @@ import os
 import pandas as pd
 import py_parser 
 import numpy as np 
+import myLogger
 
 
 def giveTimeStamp():
+  logObj  = myLogger.giveMeLoggingObject()
   tsObj = time.time()
   strToret = datetime.datetime.fromtimestamp(tsObj).strftime(constants.TIME_FORMAT) 
+  logObj.info('Time: %s', strToret)
   return strToret
   
 
 def getCSVData(dic_, dir_repo):
+	logObj  = myLogger.giveMeLoggingObject()
 	temp_list = []
 	for TEST_ML_SCRIPT in dic_:
 		# print(constants.ANALYZING_KW + TEST_ML_SCRIPT) 
@@ -134,10 +138,12 @@ def getCSVData(dic_, dir_repo):
 
 		temp_list.append( the_tup )
 		# print('='*25)
+	logObj.info('Could be poison: %s', temp_list)
 	return temp_list
   
   
 def getAllPythonFilesinRepo(path2dir):
+	logObj  = myLogger.giveMeLoggingObject()
 	valid_list = []
 	for root_, dirnames, filenames in os.walk(path2dir):
 		for file_ in filenames:
@@ -146,10 +152,12 @@ def getAllPythonFilesinRepo(path2dir):
 				if (file_.endswith( constants.PY_FILE_EXTENSION ) and (py_parser.checkIfParsablePython( full_path_file ) )   ):
 					valid_list.append(full_path_file) 
 	valid_list = np.unique(  valid_list )
+	logObj.info('Check python files in repo: %s', valid_list)
 	return valid_list
 
 
 def runFameML(inp_dir, csv_fil):
+	logObj  = myLogger.giveMeLoggingObject()
 	output_event_dict = {}
 	df_list = [] 
 	list_subfolders_with_paths = [f.path for f in os.scandir(inp_dir) if f.is_dir()]
@@ -158,6 +166,7 @@ def runFameML(inp_dir, csv_fil):
 		if subfolder not in output_event_dict:
 			output_event_dict[subfolder] = events_with_dic
 		temp_list  = getCSVData(events_with_dic, subfolder)
+		logObj.info('Could be poison', temp_list)
 		df_list    = df_list + temp_list 
 		print(constants.ANALYZING_KW, subfolder)
 		print('-'*50)
@@ -168,14 +177,16 @@ def runFameML(inp_dir, csv_fil):
 
 
 if __name__=='__main__':
+	logObj  = myLogger.giveMeLoggingObject()
 	command_line_flag = False ## after acceptance   
-
+	
 	t1 = time.time()
 	print('Started at:', giveTimeStamp() )
 	print('*'*100 )
 
 	if command_line_flag:
-		dir_path = input(constants.ASK_INPUT_FROM_USER)   
+		dir_path = input(constants.ASK_INPUT_FROM_USER)
+		logObj.info('Check input path: %s', dir_path)   
 		dir_path = dir_path.strip() 
 		if(os.path.exists( dir_path ) ):
 			repo_dir    = dir_path 
