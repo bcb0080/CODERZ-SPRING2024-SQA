@@ -64,7 +64,7 @@ def fuzzReportProportion(res_file, output_file):
 
 if __name__=='__main__':
     list1 = []
-    list2 = 'String List'
+    list2 = ["String1", "String2"]
     file_path = 'Invalid File Path'
 
     fuzzAverage(list1)
